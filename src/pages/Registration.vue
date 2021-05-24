@@ -1,57 +1,28 @@
 <template>
   <div class="login">
-    <Form v-if="step === 1" :links="links">
-      <template #link1>
-        <span>Sign up</span>
-      </template>
-      <template #link2>
-        <span>Login</span>
-      </template>
+    <Form :links="links">
       <template #inputs>
-        <Email :error="emailerror" @Data="emailData" error="">
-        </Email>
-        <password :error="passworderror" @Data="passData">
-          Password
-        </password>
-        <password :error="passwordreperror" @Data="passrepData">
-          Repeat password
-        </password>
-        <main-button @checkData="checkData">
-          Continue
-        </main-button>
-      </template>
-    </Form>
-    <Form v-if="step === 2" :links="links">
-      <template #link1>
-        <span>Sign up</span>
-      </template>
-      <template #link2>
-        <span>Login</span>
+        <div v-if="step === 1">
+          <Email :error="emailerror" @Data="emailData" error=""></Email>
+          <password :error="passworderror" @Data="passData" :name="'Password'"></password>
+          <password :error="passwordreperror" @Data="passrepData" :name="'Repeat password'"></password>
+          <main-button @checkData="checkData" :name="'Continue'" :css="'blue'"></main-button>
+        </div>
+        <div v-if="step === 2">
+          <code-n :error="codeerror" @Data="codeData"></code-n>
+          <timer-button :timer="timer"></timer-button>
+        </div>
+        <div v-if="step === 3">
+          <main-button :name="'Sign up'" :css="'blue'"></main-button>
+        </div>
       </template>
       <template #text>
-        <span>A letter with a code will be sent to the mail@mail.com. Enter it in the box below</span>
-      </template>
-      <template #inputs>
-        <code-n :error="codeerror" @Data="codeData">
-        </code-n>
-        <timer-button :timer="timer">
-        </timer-button>
-      </template>
-    </Form>
-    <Form v-if="step === 3" :links="links">
-      <template #link1>
-        <span>Sign up</span>
-      </template>
-      <template #link2>
-        <span>Login</span>
-      </template>
-      <template #text>
-        <span>All right! Welcome to the Qbik</span>
-      </template>
-      <template #inputs>
-        <main-button>
-          Sign up
-        </main-button>
+          <div v-if="step === 2">
+            <span>A letter with a code will be sent to the mail@mail.com. Enter it in the box below</span>
+          </div>
+        <div v-if="step === 3">
+          <span>All right! Welcome to the Qbik</span>
+          </div>
       </template>
     </Form>
   </div>
@@ -78,9 +49,10 @@ export default {
   },
   data () {
     return {
-      links: {
-        link1:  "/registration", link2: "/login"
-      },
+      links: [
+        { title: "Sign up", path: "/registration", class: "active"},
+        { title: "Login", path: "/login", class: "inactive"}
+      ],
       step: 1,
       email: "",
       password: "",

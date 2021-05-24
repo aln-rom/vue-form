@@ -1,54 +1,28 @@
 <template>
   <div class="password">
-    <Form v-if="step === 1" :links="links">
-      <template #link1>
-        <span>Password recovery</span>
-      </template>
-      <template #link2>
-        <span>Login</span>
-      </template>
+    <Form :links="links">
       <template #inputs>
-        <Email :error="emailerror" @Data="emailData">
-        </Email>
-        <MainButton @checkData="checkData">
-          Continue
-        </MainButton>
-      </template>
-    </Form>
-    <Form v-if="step === 2" :links="links">
-      <template #link1>
-        <span>Password recovery</span>
-      </template>
-      <template #link2>
-        <span>Login</span>
+        <div v-if="step === 1">
+          <Email :error="emailerror" @Data="emailData"></Email>
+          <MainButton @checkData="checkData" :name="'Continue'" :css="'blue'"></MainButton>
+        </div>
+        <div v-if="step === 2">
+          <code-n :error="codeerror" @Data="codeData"></code-n>
+          <MainButton
+                      :name="sendAgain ? 'Send Again' : 'Send Again in '+ seconds + ' s'"
+                      :css="sendAgain ? 'blue' : 'outline'"
+          ></MainButton>
+        </div>
+        <div v-if="step === 3">
+          <password-input :error="passworderror" :name="'Password'" @Data="passData"></password-input>
+          <password-input :error="passwordreperror" @Data="passrepData" :name="'Repeat password'"></password-input>
+          <MainButton @checkData="checkPass" :name="'Save new password'" :css="'blue'"></MainButton>
+        </div>
       </template>
       <template #text>
-        <span>A letter with a code will be sent to the mail@mail.com. Enter it in the box below</span>
-      </template>
-      <template #inputs>
-        <code-n :error="codeerror" @Data="codeData">
-        </code-n>
-        <timer-button :timer="timer">
-        </timer-button>
-      </template>
-    </Form >
-    <Form v-if="step === 3" :links="links">
-      <template #link1>
-        <span>Password recovery</span>
-      </template>
-      <template #link2>
-        <span>Login</span>
-      </template>
-      <template #inputs>
-        <password-input :error="passworderror" @Data="passData">
-          Password
-        </password-input>
-        <password-input :error="passwordreperror" @Data="passrepData">
-          Password repeat
-        </password-input>
-        <MainButton @checkData="checkPass">
-          Save new password
-        </MainButton>
+        <div v-if="step === 2">
+          <span>A letter with a code will be sent to the mail@mail.com. Enter it in the box below</span>
+        </div>
       </template>
     </Form>
   </div>
@@ -73,9 +47,10 @@ export default {
   },
   data () {
     return {
-      links: {
-          link1:  "/password", link2: "/login"
-      },
+      links: [
+        { title: "Password recovery", path: "/password", class: "active"},
+        { title: "Login", path: "/login", class: "inactive"}
+      ],
       step: 1,
       code: "",
       email: "",
@@ -86,7 +61,8 @@ export default {
       codeerror: null,
       passworderror: null,
       passwordreperror: null,
-      timer: false
+      sendAgain: false,
+      seconds: 60
     }
   },
   methods: {
@@ -98,14 +74,26 @@ export default {
           if (check.test(this.email) === false) {
               this.emailerror = "Invalid email format"
           } else {
-             this.step = 2
-              this.timer = true
+            this.sendAgain = true
+            this.step = 2
+            this.startTimer()
           }
       }
     },
+    startTimer() {
+      this.seconds = 60
+      setInterval(this.countDown, 1000);
+    },
+    countDown() {
+      if (this.seconds > 0) {
+        this.seconds += - 1
+      } else {
+        this.sendAgain = false
+      }
+    },
     checkPass () {
-        this.passworderror = null
-        this.passwordreperror=  null
+      this.passworderror = null
+      this.passwordreperror =  null
         if (this.password === "") {
             this.passworderror = "Please enter your password"
         } else if (this.passwordrep === "") {
@@ -127,12 +115,15 @@ export default {
     },
     codeData (data) {
       this.code = data
+      this.codeerror = null
+      if (this.code.length > 3) {
         if (this.code === '1234') {
-            this.step = 3
-            this.codeerror = null
+          this.step = 3
+          this.codeerror = null
         } else {
-            this.codeerror = "Invalid code"
+          this.codeerror = "Invalid code"
         }
+      }
     }
   }
 }

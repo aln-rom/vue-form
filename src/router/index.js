@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from '../pages/Login.vue'
 import Registration from '../pages/Registration.vue'
-import PasswordPage from '../pages/Password.vue'
+import PasswordPage from '../pages/Set_password.vue'
 
 Vue.use(VueRouter)
 

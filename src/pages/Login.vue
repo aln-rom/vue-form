@@ -1,23 +1,12 @@
 <template>
   <div class="login">
     <Form :links="links">
-      <template #link1>
-        <span>Login</span>
-      </template>
-      <template #link2>
-        <span>Registration</span>
-      </template>
       <template #inputs>
-        <Email :error="emailerror" @Data="emailData">
-        </Email>
-        <password :error="passworderror" @Data="passData">
-          Password
-        </password>
-        <main-button @checkData="checkData">
-          Log in
-        </main-button>
+        <Email :error="emailerror"  @Data="email = $event"></Email>
+        <password :error="passworderror" @Data="passData" :name="'Password'"></password>
+        <main-button @checkData="checkData" :name="'Log in'" :css="'blue'"></main-button>
       </template>
-      <template #link>
+      <template #router>
         <router-link class="login__link" to="/password">
           Forgot password?
         </router-link>
@@ -41,17 +30,18 @@ export default {
   },
   data () {
     return {
-      links: {
-          link1:  "/login", link2: "/registration"
-      },
-      email: "",
+      links: [
+        { title: "Login", path: "/login", class: "active"},
+        { title: "Registration", path: "/registration", class: "inactive"}
+      ],
       password: "",
       emailerror : null,
-      passworderror : null,
+      passworderror : null
     }
   },
   methods: {
     checkData () {
+      console.log(this.email)
       this.emailerror = null
       this.passworderror = null
       this.passwordreperror = null
@@ -65,9 +55,6 @@ export default {
             this.emailerror = "Invalid email format"
         }
       }
-    },
-    emailData (data) {
-      this.email = data
     },
     passData (data) {
       this.password = data

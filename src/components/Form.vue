@@ -6,13 +6,10 @@
       </svg>
     </div>
     <div class="form">
-      <div class="form__header__buttons">
-        <router-link :to="links.link1" class="active__button" >
-          <slot name="link1"></slot>
-        </router-link>
-        <router-link :to="links.link2">
-          <slot name="link2"></slot>
-        </router-link>
+      <div class="form__header__buttons" v-for="(link, i) in links" :key="i">
+          <router-link :to="link.path" :class="{active__button: link.class== 'active'}">
+            {{link.title}}
+          </router-link>
       </div>
       <div class="form__text">
         <slot name="text"></slot>
@@ -21,7 +18,7 @@
         <slot name="inputs"></slot>
       </div>
       <div class="form__link">
-        <slot name="link"></slot>
+        <slot name="router"></slot>
       </div>
     </div>
   </div>
@@ -60,13 +57,12 @@ export default {
     box-sizing: border-box;
     padding: 32px;
     &__header {
-      font-feature-settings: 'pnum' on, 'lnum' on;
-      color: #6369FF;
       &__buttons {
-        width: 100%;
-        display: flex;
-        flex-wrap: wrap;
         align-items: center;
+        font-feature-settings: 'pnum' on, 'lnum' on;
+        color: #6369FF;
+        display: inline-block;
+        float: left;
         > a {
           font-weight: 600;
           margin: 0 5px 0;
@@ -82,7 +78,7 @@ export default {
       }
     }
     &__text {
-      margin: 32px 24px 0;
+      margin: 44px 24px 0;
       font-weight: 400;
       font-size: 16px;
       line-height: 150%;
