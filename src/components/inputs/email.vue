@@ -1,12 +1,12 @@
 <template>
-  <div class="label">
+  <form class="label">
     <label for="email">
       <div class="label__text">
         Email
       </div>
       <div class="label__input">
         <input id="email"
-               type="text"
+               type="email"
                placeholder="yourmail@mail.com"
                v-model="email"
                name="email"
@@ -16,7 +16,7 @@
     <Error v-if="error">
       {{error}}
     </Error>
-  </div>
+  </form>
 </template>
 
 <script>

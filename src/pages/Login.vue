@@ -2,8 +2,8 @@
   <div class="login">
     <Form :links="links">
       <template #inputs>
-        <Email :error="emailerror"  @Data="email = $event"></Email>
-        <password :error="passworderror" @Data="passData" :name="'Password'"></password>
+        <Email :error="errors.email"  @Data="email = $event"></Email>
+        <password :error="errors.password"  @Data="password = $event" :name="'Password'"></password>
         <main-button @checkData="checkData" :name="'Log in'" :css="'blue'"></main-button>
       </template>
       <template #router>
@@ -34,30 +34,23 @@ export default {
         { title: "Login", path: "/login", class: "active"},
         { title: "Registration", path: "/registration", class: "inactive"}
       ],
-      password: "",
-      emailerror : null,
-      passworderror : null
+      errors: { email: null, password: null }
     }
   },
   methods: {
     checkData () {
-      console.log(this.email)
-      this.emailerror = null
-      this.passworderror = null
-      this.passwordreperror = null
-        if (this.email === "") {
-        this.emailerror = "Please enter your email"
-      } else if (this.password === "") {
-        this.passworderror = "Please enter your password"
+      this.errors.email = null
+      this.errors.password = null
+        if (this.email === "" || !this.email) {
+        this.errors.email = "Please enter your email"
+      } else if (this.password === "" || !this.password) {
+        this.errors.password = "Please enter your password"
       } else if (this.email) {
         var check = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         if (check.test(this.email) === false) {
-            this.emailerror = "Invalid email format"
+            this.errors.email = "Invalid email format"
         }
       }
-    },
-    passData (data) {
-      this.password = data
     }
   }
 }
