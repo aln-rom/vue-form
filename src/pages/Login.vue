@@ -2,9 +2,20 @@
   <div class="login">
     <Form :links="links">
       <template #inputs>
-        <Email :error="errors.email"  @Data="email = $event"></Email>
-        <password :error="errors.password"  @Data="password = $event" :name="'Password'"></password>
-        <main-button @checkData="checkData" :name="'Log in'" :css="'blue'"></main-button>
+        <email
+            :error="errors.email"
+            @Data="email = $event"
+        ></email>
+        <password
+            :error="errors.password"
+            @Data="password = $event"
+            :name="'Password'"
+        ></password>
+        <main-button
+            @checkData="checkData"
+            :name="'Log in'"
+            :css="'blue'"
+        ></main-button>
       </template>
       <template #router>
         <router-link class="login__link" to="/password">

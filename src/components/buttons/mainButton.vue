@@ -1,5 +1,10 @@
 <template>
-  <button :class="{blue: css == 'blue', outline: css == 'outline' }" class="main__button" @click="$emit('checkData')">
+  <button
+      type="submit"
+      :class="{blue: css == 'blue', outline: css == 'outline' }"
+      class="main__button"
+      @click="$emit('checkData')"
+  >
     {{name}}
   </button>
 </template>

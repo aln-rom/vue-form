@@ -7,7 +7,10 @@
     </div>
     <div class="form">
       <div class="form__header__buttons" v-for="(link, i) in links" :key="i">
-          <router-link :to="link.path" :class="{active__button: link.class== 'active'}">
+          <router-link
+              :to="link.path"
+              :class="{active__button: link.class== 'active'}"
+          >
             {{link.title}}
           </router-link>
       </div>

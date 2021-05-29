@@ -1,5 +1,5 @@
 <template>
-  <form class="label">
+  <div class="label">
     <label for="email">
       <div class="label__text">
         Email
@@ -16,7 +16,7 @@
     <Error v-if="error">
       {{error}}
     </Error>
-  </form>
+  </div>
 </template>
 
 <script>

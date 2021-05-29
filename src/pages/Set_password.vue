@@ -3,21 +3,43 @@
     <Form :links="links">
       <template #inputs>
         <div v-if="step === 1">
-          <Email :error="errors.email" @Data="email = $event"></Email>
-          <MainButton @checkData="checkData" :name="'Continue'" :css="'blue'"></MainButton>
+          <email
+              :error="errors.email"
+              @Data="email = $event"
+          ></email>
+          <main-button
+              @checkData="checkEmail"
+              :name="'Continue'"
+              :css="'blue'"
+          ></main-button>
         </div>
         <div v-if="step === 2">
-          <code-n :error="errors.code" @Data="code = $event, codeData()"></code-n>
-          <MainButton
-                      :name="!sendAgain ? 'Send Again' : 'Send Again in '+ seconds + ' s'"
-                      :css="!sendAgain ? 'blue' : 'outline'"
-                      @checkData="sendEmail"
-          ></MainButton>
+          <code-n
+              :error="errors.code"
+              @Data="code = $event, codeData()"
+          ></code-n>
+          <main-button
+               :name="!sendAgain ? 'Send Again' : 'Send Again in '+ seconds + ' s'"
+               :css="!sendAgain ? 'blue' : 'outline'"
+               @checkData="sendEmail"
+          ></main-button>
         </div>
         <div v-if="step === 3">
-          <password-input :error="errors.password" :name="'Password'" @Data="password = $event"></password-input>
-          <password-input :error="errors.passwordrep" @Data="passwordrep = $event" :name="'Repeat password'"></password-input>
-          <MainButton @checkData="checkPass" :name="'Save new password'" :css="'blue'"></MainButton>
+          <password-input
+              :error="errors.password"
+              :name="'Password'"
+              @Data="password = $event"
+          ></password-input>
+          <password-input
+              :error="errors.passwordrep"
+              @Data="passwordrep = $event"
+              :name="'Repeat password'"
+          ></password-input>
+          <main-buttons
+              @checkData="checkPass"
+              :name="'Save new password'"
+              :css="'blue'"
+          ></main-buttons>
         </div>
       </template>
       <template #text>
@@ -51,16 +73,14 @@ export default {
         { title: "Login", path: "/login", class: "inactive"}
       ],
       step: 1,
-      message: "",
-      passwordrep: "",
       errors: { email: null, password: null, passwordrep: null, code: null },
       sendAgain: false,
       seconds: 10
     }
   },
   methods: {
-    checkData() {
-      this.errors.email = null
+    checkEmail () {
+      this.clearErrors()
       if (this.email === "" || !this.email) {
         this.errors.email = "Please enter your email"
       }  else if (this.email) {
@@ -72,6 +92,35 @@ export default {
             this.startTimer()
           }
       }
+    },
+    checkPass () {
+      this.clearErrors()
+      if (this.password === "" || !this.password) {
+        this.errors.password = "Please enter your password"
+      } else if (this.passwordrep === ""|| !this.passwordrep) {
+        this.errors.passwordrep = "Please repeat your password"
+      } else if (this.password != this.passwordrep) {
+        this.errors.passwordrep = "Password mismatch"
+      } else {
+        this.errors.passwordrep = null
+      }
+    },
+    codeData () {
+      this.clearErrors()
+      if (this.code.length > 3) {
+        if (this.code === '1234') {
+          this.step = 3
+          this.errors.code = null
+        } else {
+          this.errors.code = "Invalid code"
+        }
+      }
+    },
+    clearErrors () {
+      this.errors.code = null
+      this.errors.password = null
+      this.errors.passwordrep =  null
+      this.errors.email = null
     },
     sendEmail () {
       if ( this.seconds <= 0 ) {
@@ -92,30 +141,6 @@ export default {
         this.seconds += - 1
       } else {
         this.sendAgain = false
-      }
-    },
-    checkPass () {
-      this.errors.password = null
-      this.errors.passwordrep =  null
-        if (this.password === "") {
-            this.errors.password = "Please enter your password"
-        } else if (this.passwordrep === "") {
-            this.errors.passwordrep = "Please repeat your password"
-        } else if (this.password != this.passwordrep) {
-        this.errors.passwordrep = "Password mismatch"
-      } else {
-        this.errors.passwordrep = null
-      }
-    },
-    codeData () {
-      this.errors.code = null
-      if (this.code.length > 3) {
-        if (this.code === '1234') {
-          this.step = 3
-          this.errors.code = null
-        } else {
-          this.errors.code = "Invalid code"
-        }
       }
     }
   }

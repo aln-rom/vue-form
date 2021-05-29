@@ -5,7 +5,13 @@
         Code
       </div>
       <div class="label__input">
-        <input id="code" type="text" placeholder="0000" v-model="code" @input="$emit('Data', code)">
+        <input
+            id="code"
+            type="text"
+            placeholder="0000"
+            v-model="code"
+            @input="$emit('Data', code)"
+        >
       </div>
     </label>
     <Error v-if="error">

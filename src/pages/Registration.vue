@@ -1,13 +1,13 @@
 <template>
   <div class="login">
-    <Form :links="links">
+    <FormBlock :links="links">
       <template #inputs>
-        <div v-if="step === 1">
-          <Email :error="errors.email" @Data="email = $event"></Email>
+        <form v-if="step === 1">
+          <email :error="errors.email" @Data="email = $event"></email>
           <password :error="errors.password" @Data="password = $event" :name="'Password'"></password>
           <password :error="errors.passwordrep" @Data="passwordrep = $event" :name="'Repeat password'"></password>
           <main-button @checkData="checkData" :name="'Continue'" :css="'blue'"></main-button>
-        </div>
+        </form>
         <div v-if="step === 2">
           <code-n :error="errors.code" @Data="code = $event"></code-n>
           <main-button
@@ -28,12 +28,12 @@
           <span>All right! Welcome to the Qbik</span>
           </div>
       </template>
-    </Form>
+    </FormBlock>
   </div>
 </template>
 
 <script>
-import Form from '../components/Form.vue'
+import FormBlock from '../components/Form.vue'
 import Email from '../components/inputs/email.vue'
 import Password from '../components/inputs/password.vue'
 import CodeN from '../components/inputs/code.vue'
@@ -42,7 +42,7 @@ import Error from '../components/errorPlate.vue'
 export default {
   name: 'Login',
   components: {
-    Form,
+    FormBlock,
     Email,
     Password,
     CodeN,
@@ -71,9 +71,7 @@ export default {
       }
     },
     check () {
-      this.errors.email = null
-      this.errors.password = null
-      this.errors.passwordrep = null
+      this.clearErrors()
       if ( (this.email === "" || !this.email) && (this.password === "" || !this.password)) {
           this.errors.email = "Please enter your email and password"
       } else if (this.email === "" || !this.email) {
@@ -88,6 +86,12 @@ export default {
             this.errors.email = "Invalid email format"
         }
       }
+    },
+    clearErrors () {
+      this.errors.code = null
+      this.errors.password = null
+      this.errors.passwordrep =  null
+      this.errors.email = null
     },
     sendEmail () {
       if ( this.seconds <= 0 ) {
@@ -111,7 +115,7 @@ export default {
       }
     },
     codeData () {
-      this.errors.code = null
+      this.clearErrors()
       if (this.code === '1234') {
         this.step = 3
         this.errors.code = null

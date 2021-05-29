@@ -5,8 +5,19 @@
         {{name}}
       </div>
       <div class="label__input">
-        <input id="password" :type="showpass ? 'text' : 'password'" placeholder="****" v-model="password" name="password" @input="$emit('Data', password)">
-        <span href="#" class="label__input__password-control" @click="showpass = !showpass"></span>
+        <input
+            id="password"
+            :type="showpass ? 'text' : 'password'"
+            placeholder="****"
+            v-model="password"
+            name="password"
+            @input="$emit('Data', password)"
+        >
+        <span
+            href="#"
+            class="label__input__password-control"
+            @click="showpass = !showpass"
+        ></span>
       </div>
     </label>
     <Error v-if="error">
